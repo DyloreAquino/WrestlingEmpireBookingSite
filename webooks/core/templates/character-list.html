@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Characters</h1>
+
+<!-- Filters -->
+<form method="get" class="mb-4 flex gap-2">
+  <select name="role" class="border px-2 py-1">
+    <option value="">All Roles</option>
+    <option value="WRESTLER">Wrestler</option>
+    <option value="MANAGER">Manager</option>
+    <option value="REFEREE">Referee</option>
+    <option value="BOOKER">Booker</option>
+  </select>
+
+  <select name="alignment" class="border px-2 py-1">
+    <option value="">All Alignments</option>
+    <option value="FACE">Face</option>
+    <option value="HEEL">Heel</option>
+    <option value="TWEENER">Tweener</option>
+  </select>
+
+  <select name="active" class="border px-2 py-1">
+    <option value="">All Status</option>
+    <option value="true">Active</option>
+    <option value="false">Inactive</option>
+  </select>
+
+  <button type="submit" class="bg-black text-white px-4 py-1">Filter</button>
+</form>
+
+<!-- Character List -->
+<table class="min-w-full border border-gray-300">
+  <thead>
+    <tr class="bg-gray-100">
+      <th class="px-4 py-2">Ring Name</th>
+      <th class="px-4 py-2">Role</th>
+      <th class="px-4 py-2">Alignment</th>
+      <th class="px-4 py-2">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for char in characters %}
+    <tr class="border-t hover:bg-gray-50">
+      <td class="px-4 py-2">
+        <a href="{% url 'character-detail' char.id %}" class="text-blue-600">{{ char.ring_name }}</a>
+      </td>
+      <td class="px-4 py-2">{{ char.get_role_display }}</td>
+      <td class="px-4 py-2">{{ char.get_alignment_display }}</td>
+      <td class="px-4 py-2">
+        {% if char.active %}Active{% else %}Inactive{% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" class="px-4 py-2">No characters found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<div class="mt-4">
+  {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="px-2 py-1 border">Previous</a>
+  {% endif %}
+  <span class="px-2 py-1">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="px-2 py-1 border">Next</a>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

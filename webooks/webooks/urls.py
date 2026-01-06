@@ -16,7 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.contrib import admin
+from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
+
+    # Core app (characters, groups, championships)
+    path("", include("core.urls")),  # could be "", so core views are at root
+
+    # Booking app (shows, matches, events)
+    path("booking/", include("booking.urls")),
+
+    # Titles app (title reigns)
+    path("titles/", include("titles.urls")),
+
+    # Storylines app
+    path("storylines/", include("storylines.urls")),
 ]
+
