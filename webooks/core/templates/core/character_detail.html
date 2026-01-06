@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}{{ character.ring_name }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">{{ character.ring_name }}</h1>
+
+<!-- Attributes -->
+<div class="mb-6 p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+    <h2 class="text-xl font-semibold mb-2">Attributes</h2>
+    <p><strong>Role:</strong> {{ character.get_role_display }}</p>
+    <p>
+        <strong>Alignment:</strong>
+        {% if character.alignment == "FACE" %}
+            <span class="px-2 py-1 bg-green-500 text-white rounded">{{ character.get_alignment_display }}</span>
+        {% elif character.alignment == "HEEL" %}
+            <span class="px-2 py-1 bg-red-500 text-white rounded">{{ character.get_alignment_display }}</span>
+        {% else %}
+            <span class="px-2 py-1 bg-yellow-500 text-black rounded">{{ character.get_alignment_display }}</span>
+        {% endif %}
+    </p>
+    <p><strong>Finisher:</strong> {{ character.finisher|default:"N/A" }}</p>
+    <p>
+        <strong>Status:</strong>
+        {% if character.active %}
+            <span class="px-2 py-1 bg-green-600 text-white rounded">Active</span>
+        {% else %}
+            <span class="px-2 py-1 bg-gray-400 text-white rounded">Inactive</span>
+        {% endif %}
+        {% if character.injured %}
+            <span class="px-2 py-1 bg-red-600 text-white rounded ml-2">Injured</span>
+        {% endif %}
+    </p>
+    <p><strong>Champion:</strong> {{ character.champion|default:"None" }}</p>
+    <p><strong>Notes:</strong> {{ character.notes|default:"None" }}</p>
+</div>
+
+<!-- Relationships -->
+<div class="mb-6 p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+    <h2 class="text-xl font-semibold mb-2">Relationships</h2>
+    <p>
+        <strong>Manager:</strong>
+        {% if character.manager %}
+            <a href="{% url 'character-detail' character.manager.id %}" class="text-blue-600">{{ character.manager.ring_name }}</a>
+        {% else %}
+            None
+        {% endif %}
+    </p>
+    <p>
+        <strong>Friends:</strong>
+        {% if character.friends.exists %}
+            {% for f in character.friends.all %}
+                <a href="{% url 'character-detail' f.id %}" class="text-green-600">{{ f.ring_name }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% else %}
+            None
+        {% endif %}
+    </p>
+    <p>
+        <strong>Enemies:</strong>
+        {% if character.enemies.exists %}
+            {% for e in character.enemies.all %}
+                <a href="{% url 'character-detail' e.id %}" class="text-red-600">{{ e.ring_name }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% else %}
+            None
+        {% endif %}
+    </p>
+</div>
+
+<!-- Win-Loss -->
+<div class="mb-6 p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+    <h2 class="text-xl font-semibold mb-2">Win-Loss Record</h2>
+    <p>{{ win_loss_ratio }}</p>
+</div>
+
+<!-- Matches -->
+<div class="mb-6 p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+    <h2 class="text-xl font-semibold mb-2">Matches</h2>
+    <ul class="list-disc pl-5">
+        {% for mp in matches %}
+        <li>
+            <a href="{% url 'match-detail' mp.match.id %}" class="text-blue-600">{{ mp.match.title }}</a>
+            - {% if mp.won %}<span class="text-green-600 font-semibold">Winner</span>{% else %}<span class="text-red-600">Loser</span>{% endif %}
+        </li>
+        {% empty %}
+        <li>No matches yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Events -->
+<div class="mb-6 p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
+    <h2 class="text-xl font-semibold mb-2">Events</h2>
+    <ul class="list-disc pl-5">
+        {% for ep in events %}
+        <li>
+            <a href="{% url 'event-detail' ep.event.id %}" class="text-blue-600">{{ ep.event.title }}</a>
+            - {{ ep.event.get_event_type_display }}
+        </li>
+        {% empty %}
+        <li>No events yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

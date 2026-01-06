@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Add Event to {{ storyline.title }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">Add Event to "{{ storyline.title }}"</h1>
+
+<form method="post" class="space-y-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="bg-black text-white px-4 py-2 rounded">Add Event</button>
+</form>
+
+<a href="{% url 'storyline-detail' storyline.id %}" class="text-blue-600 mt-4 inline-block">Back to Storyline</a>
+{% endblock %}

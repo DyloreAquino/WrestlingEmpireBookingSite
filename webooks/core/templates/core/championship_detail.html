@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}{{ character.ring_name }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">{{ character.ring_name }}</h1>
+
+<p><strong>Role:</strong> {{ character.get_role_display }}</p>
+<p><strong>Gender:</strong> {{ character.get_gender_display }}</p>
+<p><strong>Alignment:</strong> {{ character.get_alignment_display }}</p>
+<p><strong>Active:</strong> {{ character.active }}</p>
+<p><strong>Injured:</strong> {{ character.injured }}</p>
+<p><strong>Finisher:</strong> {{ character.finisher|default:"None" }}</p>
+<p><strong>Notes:</strong> {{ character.notes|default:"None" }}</p>
+
+<h2 class="text-xl font-semibold mt-6 mb-2">Championships / Title Reigns</h2>
+<ul class="list-disc pl-5">
+    {% for reign in character.titlereign_set.all %}
+        <li>
+            <a href="{% url 'championship-detail' reign.championship.id %}" class="text-blue-600">
+                {{ reign.championship.name }}
+            </a>
+            {% if reign.end_date %}
+                ({{ reign.start_date|date:"M d, Y" }} – {{ reign.end_date|date:"M d, Y" }})
+            {% else %}
+                (Current Champion since {{ reign.start_date|date:"M d, Y" }})
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>No title reigns yet.</li>
+    {% endfor %}
+</ul>
+
+<h2 class="text-xl font-semibold mt-6 mb-2">Relationships</h2>
+<p><strong>Friends:</strong> 
+    {% for friend in character.friends.all %}
+        {{ friend.ring_name }}{% if not forloop.last %}, {% endif %}
+    {% empty %}None{% endfor %}
+</p>
+<p><strong>Enemies:</strong> 
+    {% for enemy in character.enemies.all %}
+        {{ enemy.ring_name }}{% if not forloop.last %}, {% endif %}
+    {% empty %}None{% endfor %}
+</p>
+<p><strong>Manager:</strong> 
+    {% if character.manager %}
+        {{ character.manager.ring_name }}
+    {% else %}
+        None
+    {% endif %}
+</p>
+
+<h2 class="text-xl font-semibold mt-6 mb-2">Matches & Events History</h2>
+<!-- You can keep your history table here -->
+
+{% endblock %}

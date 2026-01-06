@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}{{ match.title }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">{{ match.title }}</h1>
+
+<p><strong>Show:</strong> <a href="{% url 'show-detail' match.show.id %}" class="text-blue-600">{{ match.show.title }}</a></p>
+<p><strong>Type:</strong> {{ match.get_match_type_display }}</p>
+<p><strong>Stipulation:</strong> {{ match.get_stipulation_display|default:"None" }}</p>
+<p><strong>Championship:</strong> {{ match.championship|default:"None" }}</p>
+<p><strong>Notes:</strong> {{ match.notes|default:"None" }}</p>
+
+<h2 class="text-xl font-semibold mt-6 mb-2">Participants</h2>
+<a href="{% url 'matchparticipant-add' match.id %}" class="bg-black text-white px-4 py-2 rounded mt-4 inline-block">
+    Add Participant
+</a>
+<ul class="list-disc pl-5">
+    {% for mp in participants %}
+        <li>
+            <a href="{% url 'character-detail' mp.character.id %}" class="text-blue-600">{{ mp.character.ring_name }}</a>
+            - Side: {{ mp.get_side_display }}
+            {% if mp.won %}<span class="text-green-600 font-semibold ml-2">Winner</span>{% endif %}
+        </li>
+    {% empty %}
+        <li>No participants yet.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'match-edit' match.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">Edit Match</a>
+{% endblock %}

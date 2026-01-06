@@ -140,3 +140,38 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+class EventParticipant(models.Model):
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, related_name="participants"
+    )
+
+    character = models.ForeignKey(
+        Character, null=True, blank=True, on_delete=models.CASCADE
+    )
+    group = models.ForeignKey(
+        Group, null=True, blank=True, on_delete=models.CASCADE
+    )
+
+    role = models.CharField(max_length=50, blank=True)
+
+    def __str__(self):
+        target = self.character or self.group
+        return f"{target} in {self.event}"
+
+class ShowItem(models.Model):
+    show = models.ForeignKey(
+        Show, on_delete=models.CASCADE, related_name="items"
+    )
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+
+    order_index = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ["order_index"]
+
+    def __str__(self):
+        return f"{self.show} item #{self.order_index}"

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ view.object.character.ring_name|default:"Add Participant" }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">
+    {% if view.object %}Edit Participant{% else %}Add Participant{% endif %}
+</h1>
+
+<form method="post" class="space-y-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="bg-black text-white px-4 py-2 rounded">
+        {% if view.object %}Update{% else %}Add{% endif %}
+    </button>
+</form>
+
+{% if view.object %}
+<a href="{% url 'event-detail' view.object.event.id %}" class="text-blue-600 mt-4 inline-block">Back to Event</a>
+{% else %}
+<a href="{% url 'event-detail' form.initial.event.id %}" class="text-blue-600 mt-4 inline-block">Back to Event</a>
+{% endif %}
+{% endblock %}

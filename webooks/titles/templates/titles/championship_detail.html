@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}{{ championship.name }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">{{ championship.name }}</h1>
+
+<p><strong>Gender:</strong> {{ championship.get_gender_display }}</p>
+
+<h2 class="text-xl font-semibold mt-6 mb-2">Current Champion</h2>
+{% if current_reign %}
+    <a href="{% url 'character-detail' current_reign.character.id %}" class="text-blue-600">{{ current_reign.character.ring_name }}</a>
+    - Since {{ current_reign.start_date|date:"M d, Y" }}
+{% else %}
+    <p>No current champion.</p>
+{% endif %}
+
+<h2 class="text-xl font-semibold mt-6 mb-2">Past Reigns</h2>
+<ul class="list-disc pl-5">
+    {% for reign in past_reigns %}
+        <li>
+            <a href="{% url 'character-detail' reign.character.id %}" class="text-blue-600">{{ reign.character.ring_name }}</a>
+            - {{ reign.start_date|date:"M d, Y" }} to {{ reign.end_date|date:"M d, Y" }}
+        </li>
+    {% empty %}
+        <li>No past reigns.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'championship-edit' championship.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">Edit Championship</a>
+{% endblock %}

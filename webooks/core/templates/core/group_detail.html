@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ group.name }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">{{ group.name }}</h1>
+
+<p><strong>Type:</strong> {{ group.get_group_type_display }}</p>
+<p><strong>Status:</strong> 
+    {% if group.active %}
+        <span class="px-2 py-1 bg-green-600 text-white rounded">Active</span>
+    {% else %}
+        <span class="px-2 py-1 bg-gray-400 text-white rounded">Inactive</span>
+    {% endif %}
+</p>
+
+<h2 class="text-xl font-semibold mt-4 mb-2">Members</h2>
+<ul class="list-disc pl-5">
+    {% for member in members %}
+        <li>
+            <a href="{% url 'character-detail' member.id %}" class="text-blue-600">{{ member.ring_name }}</a>
+        </li>
+    {% empty %}
+        <li>No members yet.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'group-edit' group.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">Edit Group</a>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ view.object.ring_name|default:"Add Character" }}{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">
+    {% if view.object %}Edit Character{% else %}Add Character{% endif %}
+</h1>
+
+<form method="post" class="space-y-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="bg-black text-white px-4 py-2">
+        {% if view.object %}Update{% else %}Create{% endif %}
+    </button>
+</form>
+
+<a href="{% url 'character-list' %}" class="text-blue-600 mt-4 inline-block">Back to list</a>
+{% endblock %}

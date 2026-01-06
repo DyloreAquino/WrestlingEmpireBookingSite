@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">{{ event.title }}</h1>
+
+<p><strong>Show:</strong> <a href="{% url 'show-detail' event.show.id %}" class="text-blue-600">{{ event.show.title }}</a></p>
+<p><strong>Type:</strong> {{ event.get_event_type_display }}</p>
+<p><strong>Description:</strong> {{ event.short_description|default:"None" }}</p>
+
+<h2 class="text-xl font-semibold mt-6 mb-2">Participants</h2>
+<a href="{% url 'eventparticipant-add' event.id %}" class="bg-black text-white px-4 py-2 rounded mt-4 inline-block">
+    Add Participant
+</a>
+<ul class="list-disc pl-5">
+    {% for ep in participants %}
+        <li>
+            <a href="{% url 'character-detail' ep.character.id %}" class="text-blue-600">{{ ep.character.ring_name }}</a>
+            - Role: {{ ep.get_role_display }}
+        </li>
+    {% empty %}
+        <li>No participants yet.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'eventparticipant-add' event.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">
+    Add Participant
+</a>
+
+<a href="{% url 'event-edit' event.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded ml-2">
+    Edit Event
+</a>
+{% endblock %}

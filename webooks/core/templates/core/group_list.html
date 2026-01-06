@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Groups{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Groups</h1>
+
+<a href="{% url 'group-add' %}" class="bg-black text-white px-4 py-2 rounded mb-4 inline-block">Add Group</a>
+
+<table class="min-w-full border border-gray-300">
+    <thead class="bg-gray-100 dark:bg-gray-700">
+        <tr>
+            <th class="px-4 py-2">Name</th>
+            <th class="px-4 py-2">Type</th>
+            <th class="px-4 py-2">Active</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for group in groups %}
+        <tr class="border-t hover:bg-gray-50 dark:hover:bg-gray-800">
+            <td class="px-4 py-2">
+                <a href="{% url 'group-detail' group.id %}" class="text-blue-600">{{ group.name }}</a>
+            </td>
+            <td class="px-4 py-2">{{ group.get_group_type_display }}</td>
+            <td class="px-4 py-2">
+                {% if group.active %}
+                    <span class="px-2 py-1 bg-green-600 text-white rounded">Active</span>
+                {% else %}
+                    <span class="px-2 py-1 bg-gray-400 text-white rounded">Inactive</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" class="px-4 py-2">No groups found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

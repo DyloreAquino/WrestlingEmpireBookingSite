@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}{{ storyline.title }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">{{ storyline.title }}</h1>
+
+<p><strong>Summary:</strong> {{ storyline.summary|default:"None" }}</p>
+
+<h2 class="text-xl font-semibold mt-6 mb-2">Matches</h2>
+<a href="{% url 'storyline-add-match' storyline.id %}" class="bg-black text-white px-2 py-1 rounded mb-2 inline-block">Add Match</a>
+<ul class="list-disc pl-5">
+    {% for match in matches %}
+        <li>
+            <a href="{% url 'match-detail' match.id %}" class="text-blue-600">{{ match.title }}</a>
+        </li>
+    {% empty %}
+        <li>No matches yet.</li>
+    {% endfor %}
+</ul>
+
+<h2 class="text-xl font-semibold mt-6 mb-2">Events</h2>
+<a href="{% url 'storyline-add-event' storyline.id %}" class="bg-black text-white px-2 py-1 rounded mb-2 inline-block">Add Event</a>
+<ul class="list-disc pl-5">
+    {% for event in events %}
+        <li>
+            <a href="{% url 'event-detail' event.id %}" class="text-blue-600">{{ event.title }}</a>
+        </li>
+    {% empty %}
+        <li>No events yet.</li>
+    {% endfor %}
+</ul>
+
+
+<a href="{% url 'storyline-edit' storyline.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">Edit Storyline</a>
+{% endblock %}

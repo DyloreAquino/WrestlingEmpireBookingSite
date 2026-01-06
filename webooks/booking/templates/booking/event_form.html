@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ view.object.title|default:"Add Event" }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">
+    {% if view.object %}Edit Event{% else %}Add Event{% endif %}
+</h1>
+
+<form method="post" class="space-y-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="bg-black text-white px-4 py-2 rounded">
+        {% if view.object %}Update{% else %}Create{% endif %}
+    </button>
+</form>
+
+<a href="{% url 'show-detail' form.instance.show.id %}" class="text-blue-600 mt-4 inline-block">Back to Show</a>
+{% endblock %}

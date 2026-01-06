@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Storylines{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Storylines</h1>
+
+<a href="{% url 'storyline-add' %}" class="bg-black text-white px-4 py-2 rounded mb-4 inline-block">Add Storyline</a>
+
+<ul class="list-disc pl-5">
+    {% for storyline in storylines %}
+        <li>
+            <a href="{% url 'storyline-detail' storyline.id %}" class="text-blue-600">{{ storyline.title }}</a>
+        </li>
+    {% empty %}
+        <li>No storylines yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

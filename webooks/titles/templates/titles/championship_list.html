@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Championships{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">Championships</h1>
+
+<a href="{% url 'championship-add' %}" class="bg-black text-white px-4 py-2 rounded mb-4 inline-block">Add Championship</a>
+
+<ul class="list-disc pl-5">
+    {% for championship in championships %}
+        <li>
+            <a href="{% url 'championship-detail' championship.id %}" class="text-blue-600">{{ championship.name }}</a>
+        </li>
+    {% empty %}
+        <li>No championships yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Wrestling Booking App{% endblock %}</title>
+
+    <!-- Tailwind CDN (good for prototyping) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-white text-black dark:bg-gray-900 dark:text-gray-100 font-sans">
+
+    <!-- Header / Navbar -->
+    <header class="bg-black text-white p-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">Wrestling Booking App</h1>
+        <nav class="space-x-4">
+            <a href="{% url 'character-list' %}" class="hover:underline">Characters</a>
+            <a href="{% url 'show-list' %}" class="hover:underline">Shows</a>
+            <a href="{% url 'storyline-list' %}" class="hover:underline">Storylines</a>
+            <a href="{% url 'championship-list' %}">Championships</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="p-6 min-h-screen">
+        {% block content %}
+        <!-- Child templates inject content here -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 p-4 text-center">
+        Wrestling Booking App &copy; {{ now|date:"Y" }}
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

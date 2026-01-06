@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+
+{% if last_show %}
+<div class="mb-8">
+    <h2 class="text-2xl font-semibold mb-2">Last Show: {{ last_show.title }}</h2>
+    <p><strong>Aired on:</strong> {{ last_show.airing_date|date:"M d, Y" }}</p>
+
+    <h3 class="text-xl font-semibold mt-4 mb-2">Matches</h3>
+    <table class="min-w-full border border-gray-300">
+        <thead class="bg-gray-100 dark:bg-gray-700">
+            <tr>
+                <th class="px-4 py-2">Match</th>
+                <th class="px-4 py-2">Finish</th>
+                <th class="px-4 py-2">Winner(s)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for match in last_show_matches %}
+            <tr class="border-t hover:bg-gray-50 dark:hover:bg-gray-800">
+                <td class="px-4 py-2">
+                    <a href="{% url 'match-detail' match.id %}" class="text-blue-600">{{ match.title }}</a>
+                </td>
+                <td class="px-4 py-2">{{ match.finish|default:"-" }}</td>
+                <td class="px-4 py-2">
+                    {% for participant in match.matchparticipant_set.all %}
+                        {% if participant.won %}
+                            {{ participant.character.ring_name }}{% if not forloop.last %}, {% endif %}
+                        {% endif %}
+                    {% empty %}
+                        -
+                    {% endfor %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="px-4 py-2">No matches recorded.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p>No shows have been filmed yet.</p>
+{% endif %}
+
+<div>
+    <h2 class="text-2xl font-semibold mb-2">Current Champions</h2>
+    <ul class="list-disc pl-5">
+        {% for championship, champion in current_champions.items %}
+        <li>
+            <strong>{{ championship.name }}:</strong>
+            {% if champion %}
+                <a href="{% url 'character-detail' champion.id %}" class="text-blue-600">{{ champion.ring_name }}</a>
+            {% else %}
+                No champion
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

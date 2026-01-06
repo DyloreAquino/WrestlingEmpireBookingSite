@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}{{ show.title }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">{{ show.title }}</h1>
+
+<p><strong>Type:</strong> {{ show.get_show_type_display }}</p>
+<p><strong>Episode:</strong> {{ show.episode_number }}</p>
+<p><strong>Airing Date:</strong> {{ show.airing_date|date:"M d, Y" }}</p>
+<p>
+    <strong>Filmed:</strong> {{ show.filmed }}
+    <strong>Uploaded:</strong> {{ show.uploaded }}
+    {% if show.youtube_link %}<a href="{{ show.youtube_link }}" target="_blank" class="text-blue-600 ml-2">Watch</a>{% endif %}
+</p>
+
+<a href="{% url 'show-edit' show.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">Edit Show</a>
+
+<hr class="my-6">
+
+<h2 class="text-xl font-semibold mb-2">Matches</h2>
+<table class="min-w-full border border-gray-300">
+    <thead class="bg-gray-100 dark:bg-gray-700">
+        <tr>
+            <th class="px-4 py-2">Title</th>
+            <th class="px-4 py-2">Type</th>
+            <th class="px-4 py-2">Stipulation</th>
+            <th class="px-4 py-2">Championship</th>
+            <th class="px-4 py-2">Finish</th>
+            <th class="px-4 py-2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for match in matches %}
+        <tr class="border-t hover:bg-gray-50 dark:hover:bg-gray-800">
+            <td class="px-4 py-2">
+                <a href="{% url 'match-detail' match.id %}" class="text-blue-600">{{ match.title }}</a>
+            </td>
+            <td class="px-4 py-2">{{ match.get_match_type_display }}</td>
+            <td class="px-4 py-2">{{ match.get_stipulation_display|default:"-" }}</td>
+            <td class="px-4 py-2">{{ match.championship|default:"-" }}</td>
+            <td class="px-4 py-2">
+                {% if match.finish %}
+                    {{ match.finish }}
+                {% else %}
+                    Not Simulated
+                {% endif %}
+            </td>
+            <td class="px-4 py-2">
+                {% if not match.finish %}
+                    <a href="{% url 'match-simulate' match.id %}" class="bg-black text-white px-2 py-1 rounded">Simulate</a>
+                {% else %}
+                    ✅ Simulated
+                {% endif %}
+                <a href="{% url 'match-edit' match.id %}" class="bg-gray-700 text-white px-2 py-1 rounded ml-1">Edit</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="px-4 py-2">No matches added yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<hr class="my-6">
+
+<h2 class="text-xl font-semibold mb-2">Events</h2>
+<ul class="list-disc pl-5">
+    {% for event in events %}
+        <li>
+            <a href="{% url 'event-detail' event.id %}" class="text-blue-600">{{ event.title }}</a>
+        </li>
+    {% empty %}
+        <li>No events added yet.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
