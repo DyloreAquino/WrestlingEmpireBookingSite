@@ -14,7 +14,7 @@
 
     <!-- Header / Navbar -->
     <header class="bg-black text-white p-4 flex justify-between items-center">
-        <h1 class="text-xl font-bold">Wrestling Booking App</h1>
+        <h1 class="text-xl font-bold"><a href="/">Wrestling Booking App</a></h1>
         <nav class="space-x-4">
             <a href="{% url 'character-list' %}" class="hover:underline">Characters</a>
             <a href="{% url 'show-list' %}" class="hover:underline">Shows</a>
@@ -32,7 +32,7 @@
 
     <!-- Footer -->
     <footer class="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 p-4 text-center">
-        Wrestling Booking App &copy; {{ now|date:"Y" }}
+        Jerold Aquino &copy; {{ now|date:"Y" }}
     </footer>
 
     {% block extra_js %}{% endblock %}

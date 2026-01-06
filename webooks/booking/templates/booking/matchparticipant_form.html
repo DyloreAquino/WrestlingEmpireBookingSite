@@ -16,9 +16,8 @@
     </button>
 </form>
 
-{% if view.object %}
-<a href="{% url 'match-detail' view.object.match.id %}" class="text-blue-600 mt-4 inline-block">Back to Match</a>
-{% else %}
-<a href="{% url 'match-detail' form.initial.match.id %}" class="text-blue-600 mt-4 inline-block">Back to Match</a>
-{% endif %}
+<!-- Always use the `match` variable passed from the view -->
+<a href="{% url 'match-detail' match.id %}" class="text-blue-600 mt-4 inline-block">
+    ← Back to Match
+</a>
 {% endblock %}

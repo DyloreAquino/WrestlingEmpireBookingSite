@@ -101,3 +101,8 @@ class Championship(models.Model):
     def __str__(self):
         return self.name
 
+    # ← Add this
+    def current_reign(self):
+        return self.reigns.filter(end_date__isnull=True).first()
+
+

@@ -11,6 +11,22 @@ class Storyline(models.Model):
 
     def __str__(self):
         return self.title
+    
+    @property
+    def matches(self):
+        from booking.models import Match
+        match_ct = ContentType.objects.get_for_model(Match)
+        return Match.objects.filter(
+            id__in=self.points.filter(content_type=match_ct).values_list('object_id', flat=True)
+        )
+
+    @property
+    def events(self):
+        from booking.models import Event
+        event_ct = ContentType.objects.get_for_model(Event)
+        return Event.objects.filter(
+            id__in=self.points.filter(content_type=event_ct).values_list('object_id', flat=True)
+        )
 
 class StorylinePoint(models.Model):
     storyline = models.ForeignKey(

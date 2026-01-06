@@ -25,6 +25,13 @@ class Show(models.Model):
     def __str__(self):
         return f"{self.title} ({self.airing_date})"
 
+class Stipulation(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 class Match(models.Model):
     class MatchType(models.TextChoices):
         SINGLES = "SINGLES", "Singles"
@@ -37,23 +44,18 @@ class Match(models.Model):
         BATTLE_ROYALE = "BATTLE_ROYALE", "Battle Royale"
         ROYAL_RUMBLE = "ROYAL_RUMBLE", "Royal Rumble"
 
-    class Stipulation(models.TextChoices):
-        HARDCORE = "HARDCORE", "Hardcore"
-        OPEN_CHALLENGE = "OPEN_CHALLENGE", "Open Challenge"
-        CONFRONTATION = "CONFRONTATION", "Confrontation"
-        BEST_OF_THREE = "BEST_OF_THREE", "Best of Three"
-        IRONMAN = "IRONMAN", "Ironman"
-        LAST_MAN = "LAST_MAN", "Last Man Standing"
-        SUBMISSION = "SUBMISSION", "Submission"
-        STREET_FIGHT = "STREET_FIGHT", "Street Fight"
-        LADDER = "LADDER", "Ladder"
-        HELL_CELL = "HELL_CELL", "Hell in a Cell"
-        TRAINING = "TRAINING", "Training"
+    show = models.ForeignKey(
+        "booking.Show",
+        on_delete=models.CASCADE,
+        related_name="matches"
+    )
 
     title = models.CharField(max_length=200)
     match_type = models.CharField(max_length=30, choices=MatchType.choices)
-    stipulation = models.CharField(
-        max_length=30, choices=Stipulation.choices, blank=True
+    stipulations = models.ManyToManyField(
+        Stipulation,
+        blank=True,
+        related_name="matches"
     )
 
     championship = models.ForeignKey(
@@ -65,6 +67,7 @@ class Match(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class MatchParticipant(models.Model):
     class Role(models.TextChoices):
@@ -131,6 +134,12 @@ class Event(models.Model):
         TRAINING = "TRAINING", "Training"
         SEGMENT = "SEGMENT", "Segment"
         TURN = "TURN", "Turn"
+        
+    show = models.ForeignKey(
+        "booking.Show",
+        on_delete=models.CASCADE,
+        related_name="events"
+    )
 
     title = models.CharField(max_length=200)
     event_type = models.CharField(max_length=30, choices=EventType.choices)

@@ -23,3 +23,15 @@ class CharacterForm(forms.ModelForm):
     class Meta:
         model = Character
         fields = ["ring_name", "role", "gender", "alignment", "finisher", "active", "notes", "injured", "friends", "enemies", "manager", "champion"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs.update({
+                "class": (
+                    "w-half rounded-md px-3 py-2 text-white "
+                    "bg-gray-400 dark:bg-gray-700 "
+                    "focus:outline-none focus:ring-2 focus:ring-blue-500"
+                )
+            })

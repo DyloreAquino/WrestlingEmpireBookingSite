@@ -13,7 +13,11 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path("matches/add/", MatchCreateView.as_view(), name="match-add"),
+    path(
+        "shows/<int:show_id>/matches/add/",
+        MatchCreateView.as_view(),
+        name="match-add",
+    ),
     path("matches/<int:pk>/", MatchDetailView.as_view(), name="match-detail"),
     path("matches/<int:pk>/edit/", MatchUpdateView.as_view(), name="match-edit"),
 ]
@@ -32,7 +36,11 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path("events/add/", EventCreateView.as_view(), name="event-add"),
+    path(
+        "shows/<int:show_id>/events/add/",
+        EventCreateView.as_view(),
+        name="event-add",
+    ),
     path("events/<int:pk>/", EventDetailView.as_view(), name="event-detail"),
     path("events/<int:pk>/edit/", EventUpdateView.as_view(), name="event-edit"),
 ]

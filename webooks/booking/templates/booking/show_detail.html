@@ -16,6 +16,18 @@
 
 <a href="{% url 'show-edit' show.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">Edit Show</a>
 
+<div class="flex gap-4 mb-4">
+  <a href="{% url 'match-add' show.id %}"
+     class="px-4 py-2 bg-blue-600 text-white rounded">
+    + Add Match
+  </a>
+
+  <a href="{% url 'event-add' show.id %}"
+     class="px-4 py-2 bg-purple-600 text-white rounded">
+    + Add Event
+  </a>
+</div>
+
 <hr class="my-6">
 
 <h2 class="text-xl font-semibold mb-2">Matches</h2>

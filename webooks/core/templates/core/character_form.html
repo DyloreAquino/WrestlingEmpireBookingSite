@@ -1,20 +1,47 @@
 {% extends "base.html" %}
 
-{% block title %}{{ view.object.ring_name|default:"Add Character" }}{% endblock %}
+{% block title %}
+  {% if view.object %}Edit Character{% else %}Add Character{% endif %}
+{% endblock %}
 
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">
-    {% if view.object %}Edit Character{% else %}Add Character{% endif %}
+<h1 class="text-2xl font-bold mb-6">
+  {% if view.object %}Edit Character{% else %}Add Character{% endif %}
 </h1>
 
-<form method="post" class="space-y-4">
+<div class="flex items-center justify-center">
+  <form method="post" class="w-full max-w-xl space-y-6 mx-auto">
     {% csrf_token %}
-    {{ form.as_p }}
 
-    <button type="submit" class="bg-black text-white px-4 py-2">
-        {% if view.object %}Update{% else %}Create{% endif %}
+    {% for field in form %}
+      <div>
+        <label class="block font-semibold mb-1">
+          {{ field.label }}
+        </label>
+
+        {{ field }}
+
+        {% if field.errors %}
+          <p class="text-red-500 text-sm mt-1">
+            {{ field.errors|striptags }}
+          </p>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <button
+      type="submit"
+      class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+    >
+      {% if view.object %}Update{% else %}Create{% endif %}
     </button>
-</form>
+  </form>
+</div>
 
-<a href="{% url 'character-list' %}" class="text-blue-600 mt-4 inline-block">Back to list</a>
+<a
+  href="{% url 'character-list' %}"
+  class="text-blue-600 mt-6 inline-block"
+>
+  Back to list
+</a>
 {% endblock %}

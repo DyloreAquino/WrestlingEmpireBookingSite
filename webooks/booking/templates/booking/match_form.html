@@ -16,5 +16,10 @@
     </button>
 </form>
 
-<a href="{% url 'show-detail' form.instance.show.id %}" class="text-blue-600 mt-4 inline-block">Back to Show</a>
+{% if show %}
+<a href="{% url 'show-detail' show.id %}" class="text-blue-600 mt-4 inline-block">
+    ← Back to Show
+</a>
+{% endif %}
+
 {% endblock %}

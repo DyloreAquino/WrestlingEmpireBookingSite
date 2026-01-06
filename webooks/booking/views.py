@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from booking.models import Show, Match, MatchParticipant, Event, EventParticipant
-from booking.forms import MatchSimulationForm
+from booking.forms import MatchSimulationForm, ShowForm
 from core.models import Character
 from titles.models import TitleReign
 
@@ -23,22 +23,22 @@ class ShowDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         show = self.object
-        context["matches"] = show.match_set.all()
-        context["events"] = show.event_set.all()
+        context["matches"] = show.matches.all()
+        context["events"] = show.events.all()
         return context
 
 # Show Create
 class ShowCreateView(CreateView):
     model = Show
+    form_class = ShowForm
     template_name = "booking/show_form.html"
-    fields = ["title", "show_type", "episode_number", "airing_date", "filmed", "uploaded", "youtube_link"]
     success_url = reverse_lazy("show-list")
 
 # Show Update
 class ShowUpdateView(UpdateView):
     model = Show
+    form_class = ShowForm
     template_name = "booking/show_form.html"
-    fields = ["title", "show_type", "episode_number", "airing_date", "filmed", "uploaded", "youtube_link"]
     success_url = reverse_lazy("show-list")
 
 # Match Detail
@@ -51,22 +51,54 @@ class MatchDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         match = self.object
         # All participants in this match
-        context["participants"] = match.matchparticipant_set.all()
+        context["participants"] = match.participants.all()
         return context
 
-# Match Create
 class MatchCreateView(CreateView):
     model = Match
+    fields = [
+        "title",
+        "match_type",
+        "stipulations",
+        "championship",
+        "notes",
+    ]
     template_name = "booking/match_form.html"
-    fields = ["show", "title", "match_type", "stipulation", "championship", "notes"]
-    success_url = reverse_lazy("show-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["show"] = Show.objects.get(pk=self.kwargs["show_id"])
+        return context
+
+    def form_valid(self, form):
+        show = Show.objects.get(pk=self.kwargs["show_id"])
+        form.instance.show = show
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("show-detail", kwargs={"pk": self.object.show.id})
+
 
 # Match Update
 class MatchUpdateView(UpdateView):
     model = Match
+    fields = [
+        "title",
+        "match_type",
+        "stipulations",
+        "championship",
+        "notes",
+    ]
     template_name = "booking/match_form.html"
-    fields = ["show", "title", "match_type", "stipulation", "championship", "notes"]
-    success_url = reverse_lazy("show-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pass the show explicitly to the template
+        context["show"] = self.object.show
+        return context
+
+    def get_success_url(self):
+        return reverse("show-detail", kwargs={"pk": self.object.show.pk})
     
 
 class MatchParticipantCreateView(CreateView):
@@ -79,8 +111,21 @@ class MatchParticipantCreateView(CreateView):
         match_id = self.kwargs.get("match_id")
         return {"match": match_id} if match_id else {}
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pass the match to the template
+        context['match'] = Match.objects.get(pk=self.kwargs['match_id'])
+        return context
+
+    def form_valid(self, form):
+        # Assign the match before saving
+        match = Match.objects.get(pk=self.kwargs['match_id'])
+        form.instance.match = match
+        return super().form_valid(form)
+
     def get_success_url(self):
-        return reverse_lazy("match-detail", kwargs={"pk": self.object.match.id})
+        # After saving, go back to match detail
+        return reverse("match-detail", kwargs={"pk": self.object.match.pk})
 
 
 class MatchParticipantUpdateView(UpdateView):
@@ -101,7 +146,7 @@ class EventDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         event = self.object
         # All participants for this event
-        context["participants"] = event.eventparticipant_set.all()
+        context["participants"] = event.participants.all()
         return context
 
 # Event Create
@@ -142,7 +187,7 @@ class EventParticipantUpdateView(UpdateView):
 
 def simulate_match(request, pk):
     match = get_object_or_404(Match, pk=pk)
-    participants = match.matchparticipant_set.all()
+    participants = match.participants.all()
 
     if request.method == "POST":
         form = MatchSimulationForm(request.POST, match=match)

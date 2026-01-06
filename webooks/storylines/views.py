@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
-from storylines.models import Storyline
+from storylines.models import Storyline, StorylinePoint
 from storylines.forms import AddMatchToStorylineForm, AddEventToStorylineForm
 from booking.models import Match, Event
+from django.contrib.contenttypes.models import ContentType
 
 # Storyline List
 class StorylineListView(ListView):
@@ -41,20 +42,33 @@ class StorylineUpdateView(UpdateView):
 
 def add_match_to_storyline(request, pk):
     storyline = get_object_or_404(Storyline, pk=pk)
-    
+    match_ct = ContentType.objects.get_for_model(Match)
+
+    # Exclude matches already in this storyline
+    used_match_ids = StorylinePoint.objects.filter(
+        storyline=storyline,
+        content_type=match_ct
+    ).values_list('object_id', flat=True)
+
+    available_matches = Match.objects.exclude(id__in=used_match_ids)
+
     if request.method == "POST":
-        form = AddMatchToStorylineForm(request.POST)
+        form = AddMatchToStorylineForm(request.POST, available_matches=available_matches)
         if form.is_valid():
-            match = form.cleaned_data["match"]
-            storyline.matches.add(match)
-            return redirect("storyline-detail", pk=storyline.id)
+            match = form.cleaned_data['match']
+            StorylinePoint.objects.create(
+                storyline=storyline,
+                content_type=match_ct,
+                object_id=match.id
+            )
+            return redirect("storyline-detail", pk=storyline.pk)
     else:
-        # Exclude matches already in this storyline
-        form = AddMatchToStorylineForm()
-        form.fields["match"].queryset = Match.objects.exclude(storylines=storyline)
+        form = AddMatchToStorylineForm(available_matches=available_matches)
 
-    return render(request, "storylines/add_match_to_storyline.html", {"form": form, "storyline": storyline})
-
+    return render(request, "storylines/add_match_to_storyline.html", {
+        "storyline": storyline,
+        "form": form
+    })
 
 def add_event_to_storyline(request, pk):
     storyline = get_object_or_404(Storyline, pk=pk)
