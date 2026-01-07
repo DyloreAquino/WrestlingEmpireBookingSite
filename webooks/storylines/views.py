@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from storylines.models import Storyline, StorylinePoint
-from storylines.forms import AddMatchToStorylineForm, AddEventToStorylineForm
+from storylines.forms import AddMatchToStorylineForm, AddEventToStorylineForm, StorylineForm
 from booking.models import Match, Event
 from django.contrib.contenttypes.models import ContentType
 
@@ -29,15 +29,15 @@ class StorylineDetailView(DetailView):
 # Storyline Create
 class StorylineCreateView(CreateView):
     model = Storyline
+    form_class = StorylineForm
     template_name = "storylines/storyline_form.html"
-    fields = ["title", "summary"]
     success_url = reverse_lazy("storyline-list")
 
 # Storyline Update
 class StorylineUpdateView(UpdateView):
     model = Storyline
+    form_class = StorylineForm
     template_name = "storylines/storyline_form.html"
-    fields = ["title", "summary"]
     success_url = reverse_lazy("storyline-list")
 
 def add_match_to_storyline(request, pk):

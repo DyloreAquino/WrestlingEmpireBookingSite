@@ -1,5 +1,6 @@
 from django import forms
 from booking.models import Match, Event
+from storylines.models import Storyline
 
 class AddMatchToStorylineForm(forms.Form):
     match = forms.ModelChoiceField(queryset=Match.objects.none())
@@ -54,5 +55,27 @@ class AddEventToStorylineForm(forms.Form):
                         "w-half rounded-md px-3 py-2 text-white"
                         "bg-gray-400 dark:bg-gray-700 "
                         "focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    )
+                })
+
+
+class StorylineForm(forms.ModelForm):
+    class Meta:
+        model = Storyline
+        fields = ["title", "summary"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if isinstance(field.widget, forms.CheckboxSelectMultiple):
+                field.widget.attrs.update({"class": "space-y-2"})
+            elif isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs.update({"class": "h-5 w-5 text-blue-600"})
+            else:
+                field.widget.attrs.update({
+                    "class": (
+                        "w-half rounded-md px-3 py-2 text-white"
+                        " bg-gray-400 dark:bg-gray-700"
+                        " focus:outline-none focus:ring-2 focus:ring-blue-500"
                     )
                 })
