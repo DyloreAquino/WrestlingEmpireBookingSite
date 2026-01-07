@@ -33,6 +33,24 @@ class Character(models.Model):
     def __str__(self):
         return self.ring_name
 
+    @property
+    def manager(self):
+        """Return the character's manager (if any) via CharacterRelationship"""
+        rel = self.relationships.filter(relationship_type=CharacterRelationship.RelationshipType.MANAGER).first()
+        return rel.related_character if rel else None
+
+    @property
+    def friends(self):
+        """Return a queryset of Characters who are marked as friends of this character."""
+        ids = self.relationships.filter(relationship_type=CharacterRelationship.RelationshipType.FRIEND).values_list('related_character', flat=True)
+        return Character.objects.filter(pk__in=ids)
+
+    @property
+    def enemies(self):
+        """Return a queryset of Characters who are marked as enemies of this character."""
+        ids = self.relationships.filter(relationship_type=CharacterRelationship.RelationshipType.ENEMY).values_list('related_character', flat=True)
+        return Character.objects.filter(pk__in=ids)
+
 class Group(models.Model):
     class GroupType(models.TextChoices):
         TAG = "TAG", "Tag Team"

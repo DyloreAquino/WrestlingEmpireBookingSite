@@ -69,11 +69,98 @@ class CharacterCreateView(CreateView):
     template_name = "core/character_form.html"
     success_url = reverse_lazy("character-list")
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        # Sync relationships after saving
+        from core.models import CharacterRelationship
+        character = self.object
+
+        # Clear any existing relationships of these types (should be none for new)
+        CharacterRelationship.objects.filter(
+            character=character,
+            relationship_type__in=[
+                CharacterRelationship.RelationshipType.FRIEND,
+                CharacterRelationship.RelationshipType.ENEMY,
+                CharacterRelationship.RelationshipType.MANAGER,
+            ],
+        ).delete()
+
+        # Create friend relationships
+        for f in form.cleaned_data.get('friends') or []:
+            if f != character:
+                CharacterRelationship.objects.create(
+                    character=character,
+                    related_character=f,
+                    relationship_type=CharacterRelationship.RelationshipType.FRIEND
+                )
+
+        # Create enemy relationships
+        for e in form.cleaned_data.get('enemies') or []:
+            if e != character:
+                CharacterRelationship.objects.create(
+                    character=character,
+                    related_character=e,
+                    relationship_type=CharacterRelationship.RelationshipType.ENEMY
+                )
+
+        # Manager (single)
+        manager = form.cleaned_data.get('manager')
+        if manager and manager != character:
+            CharacterRelationship.objects.create(
+                character=character,
+                related_character=manager,
+                relationship_type=CharacterRelationship.RelationshipType.MANAGER
+            )
+
+        return response
+
 class CharacterUpdateView(UpdateView):
     model = Character
     form_class = CharacterForm
     template_name = "core/character_form.html"
     success_url = reverse_lazy("character-list")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        from core.models import CharacterRelationship
+        character = self.object
+
+        # Clear existing relationship entries for this character for these types
+        CharacterRelationship.objects.filter(
+            character=character,
+            relationship_type__in=[
+                CharacterRelationship.RelationshipType.FRIEND,
+                CharacterRelationship.RelationshipType.ENEMY,
+                CharacterRelationship.RelationshipType.MANAGER,
+            ],
+        ).delete()
+
+        # Recreate based on form data
+        for f in form.cleaned_data.get('friends') or []:
+            if f != character:
+                CharacterRelationship.objects.create(
+                    character=character,
+                    related_character=f,
+                    relationship_type=CharacterRelationship.RelationshipType.FRIEND
+                )
+
+        for e in form.cleaned_data.get('enemies') or []:
+            if e != character:
+                CharacterRelationship.objects.create(
+                    character=character,
+                    related_character=e,
+                    relationship_type=CharacterRelationship.RelationshipType.ENEMY
+                )
+
+        manager = form.cleaned_data.get('manager')
+        if manager and manager != character:
+            CharacterRelationship.objects.create(
+                character=character,
+                related_character=manager,
+                relationship_type=CharacterRelationship.RelationshipType.MANAGER
+            )
+
+        return response
 
 
 class GroupListView(ListView):

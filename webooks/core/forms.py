@@ -27,6 +27,32 @@ class CharacterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Exclude self from relationship choices and set initial values when editing
+        if self.instance and self.instance.pk:
+            self.fields['friends'].queryset = Character.objects.exclude(pk=self.instance.pk)
+            self.fields['enemies'].queryset = Character.objects.exclude(pk=self.instance.pk)
+            self.fields['manager'].queryset = Character.objects.exclude(pk=self.instance.pk)
+
+            # Preselect existing relationships
+            from core.models import CharacterRelationship
+            friend_ids = CharacterRelationship.objects.filter(
+                character=self.instance,
+                relationship_type=CharacterRelationship.RelationshipType.FRIEND
+            ).values_list('related_character', flat=True)
+            enemy_ids = CharacterRelationship.objects.filter(
+                character=self.instance,
+                relationship_type=CharacterRelationship.RelationshipType.ENEMY
+            ).values_list('related_character', flat=True)
+            manager_rel = CharacterRelationship.objects.filter(
+                character=self.instance,
+                relationship_type=CharacterRelationship.RelationshipType.MANAGER
+            ).first()
+
+            self.fields['friends'].initial = Character.objects.filter(pk__in=friend_ids)
+            self.fields['enemies'].initial = Character.objects.filter(pk__in=enemy_ids)
+            if manager_rel:
+                self.fields['manager'].initial = manager_rel.related_character
+
         for name, field in self.fields.items():
             if isinstance(field.widget, forms.CheckboxSelectMultiple):
                 field.widget.attrs.update({
