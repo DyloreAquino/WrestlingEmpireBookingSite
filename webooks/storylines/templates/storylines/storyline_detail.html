@@ -8,28 +8,94 @@
 <p><strong>Summary:</strong> {{ storyline.summary|default:"None" }}</p>
 
 <h2 class="text-xl font-semibold mt-6 mb-2">Matches</h2>
-<button onclick="window.location='{% url 'storyline-add-match' storyline.id %}'" class="bg-black text-white px-2 py-1 rounded mb-2 inline-block cursor-pointer">Add Match</button>
-<ul class="list-disc pl-5">
+<div class="mb-2">
+    <a href="{% url 'storyline-add-match' storyline.id %}" class="bg-black text-white px-2 py-1 rounded inline-block">Add Match</a>
+</div>
+<table class="min-w-full border border-gray-300">
+  <thead>
+    <tr class="bg-gray-100 dark:bg-gray-700">
+      <th class="px-4 py-2">Title</th>
+      <th class="px-4 py-2">Type</th>
+      <th class="px-4 py-2">Stipulations</th>
+      <th class="px-4 py-2">Finish</th>
+      <th class="px-4 py-2">Participants</th>
+    </tr>
+  </thead>
+  <tbody>
     {% for match in matches %}
-        <li>
-            <button onclick="window.location='{% url 'match-detail' match.id %}'" class="bg-blue-600 text-white px-2 py-1 rounded cursor-pointer">{{ match.title }}</button>
-        </li>
+    <tr class="border-t hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer" onclick="window.location='{% url 'match-detail' match.id %}'" role="button" tabindex="0" onkeypress="if(event.key==='Enter'){window.location='{% url 'match-detail' match.id %}'}">
+      <td class="px-4 py-2 font-bold">{{ match.title }}</td>
+      <td class="px-4 py-2">{{ match.get_match_type_display }}</td>
+      <td class="px-4 py-2">
+        {% if match.stipulations.exists %}
+          {% for s in match.stipulations.all %}{{ s.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+        {% else %}
+          None
+        {% endif %}
+      </td>
+      <td class="px-4 py-2">{{ match.finish|default:"Not Simulated" }}</td>
+      <td class="px-4 py-2">
+        {% if match.participants.exists %}
+          {% for p in match.participants.all %}
+            {% if p.character %}
+              {{ p.character.ring_name }}
+            {% elif p.group %}
+              {{ p.group.name }}
+            {% else %}
+              Unknown
+            {% endif %}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        {% else %}
+          None
+        {% endif %}
+      </td>
+    </tr>
     {% empty %}
-        <li>No matches yet.</li>
+    <tr><td colspan="5" class="px-4 py-2">No matches yet.</td></tr>
     {% endfor %}
-</ul>
+  </tbody>
+</table> 
 
 <h2 class="text-xl font-semibold mt-6 mb-2">Events</h2>
-<button onclick="window.location='{% url 'storyline-add-event' storyline.id %}'" class="bg-black text-white px-2 py-1 rounded mb-2 inline-block cursor-pointer">Add Event</button>
-<ul class="list-disc pl-5">
+<div class="mb-2">
+    <a href="{% url 'storyline-add-event' storyline.id %}" class="bg-black text-white px-2 py-1 rounded inline-block">Add Event</a>
+</div>
+<table class="min-w-full border border-gray-300">
+  <thead>
+    <tr class="bg-gray-100 dark:bg-gray-700">
+      <th class="px-4 py-2">Title</th>
+      <th class="px-4 py-2">Type</th>
+      <th class="px-4 py-2">Description</th>
+      <th class="px-4 py-2">Participants</th>
+    </tr>
+  </thead>
+  <tbody>
     {% for event in events %}
-        <li>
-            <button onclick="window.location='{% url 'event-detail' event.id %}'" class="bg-blue-600 text-white px-2 py-1 rounded cursor-pointer">{{ event.title }}</button>
-        </li>
+    <tr class="border-t hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer" onclick="window.location='{% url 'event-detail' event.id %}'" role="button" tabindex="0" onkeypress="if(event.key==='Enter'){window.location='{% url 'event-detail' event.id %}'}">
+      <td class="px-4 py-2 font-bold">{{ event.title }}</td>
+      <td class="px-4 py-2">{{ event.get_event_type_display }}</td>
+      <td class="px-4 py-2">{{ event.description|default:"None" }}</td>
+      <td class="px-4 py-2">
+        {% if event.participants.exists %}
+          {% for p in event.participants.all %}
+            {% if p.character %}
+              {{ p.character.ring_name }}
+            {% elif p.group %}
+              {{ p.group.name }}
+            {% else %}
+              Unknown
+            {% endif %}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        {% else %}
+          None
+        {% endif %}
+      </td>
+    </tr>
     {% empty %}
-        <li>No events yet.</li>
+    <tr><td colspan="4" class="px-4 py-2">No events yet.</td></tr>
     {% endfor %}
-</ul>
+  </tbody>
+</table>
 
 
 <button onclick="window.location='{% url 'storyline-edit' storyline.id %}'" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded cursor-pointer">Edit Storyline</button>
