@@ -3,7 +3,10 @@
 {% block title %}{{ character.ring_name }}{% endblock %}
 
 {% block content %}
-<h1 class="text-3xl font-bold mb-6">{{ character.ring_name }}</h1>
+<div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold">{{ character.ring_name }}</h1>
+    <a href="{% url 'character-edit' character.id %}" class="bg-yellow-500 text-white px-3 py-1 rounded">Edit</a>
+</div>
 
 <!-- Attributes -->
 <div class="mb-6 p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">

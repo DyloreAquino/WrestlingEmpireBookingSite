@@ -42,6 +42,7 @@
       <th class="px-4 py-2">Role</th>
       <th class="px-4 py-2">Alignment</th>
       <th class="px-4 py-2">Status</th>
+      <th class="px-4 py-2">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -55,6 +56,9 @@
       <td class="px-4 py-2">{{ char.get_alignment_display }}</td>
       <td class="px-4 py-2">
         {% if char.active %}Active{% else %}Inactive{% endif %}
+      </td>
+      <td class="px-4 py-2">
+        <button onclick="event.stopPropagation(); window.location='{% url 'character-edit' char.id %}'" class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</button>
       </td>
     </tr>
     {% empty %}
