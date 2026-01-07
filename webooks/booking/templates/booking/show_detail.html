@@ -39,6 +39,7 @@
             <th class="px-4 py-2">Stipulation</th>
             <th class="px-4 py-2">Championship</th>
             <th class="px-4 py-2">Finish</th>
+            <th class="px-4 py-2">Participants</th>
             <th class="px-4 py-2">Actions</th>
         </tr>
     </thead>
@@ -59,6 +60,21 @@
                     Not Simulated
                 {% endif %}
             </td>
+            <td class="px-4 py-2">
+                {% if match.participants.exists %}
+                  {% for p in match.participants.all %}
+                    {% if p.character %}
+                      {{ p.character.ring_name }}
+                    {% elif p.group %}
+                      {{ p.group.name }}
+                    {% else %}
+                      Unknown
+                    {% endif %}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                {% else %}
+                  None
+                {% endif %}
+            </td>
             <td class="px-4 py-2" onclick="event.stopPropagation()">
                 {% if not match.finish %}
                     <button onclick="window.location='{% url 'match-simulate' match.id %}'" class="bg-black text-white px-2 py-1 rounded cursor-pointer">Simulate</button>
@@ -67,10 +83,10 @@
                 {% endif %}
                 <button onclick="window.location='{% url 'match-edit' match.id %}'" class="bg-gray-700 text-white px-2 py-1 rounded ml-1 cursor-pointer">Edit</button>
                 <button onclick="window.location='{% url 'match-delete' match.id %}'" class="bg-red-600 text-white px-2 py-1 rounded ml-1 cursor-pointer">Delete</button>
-            </td>
+            </td> 
         </tr>
         {% empty %}
-        <tr><td colspan="6" class="px-4 py-2">No matches added yet.</td></tr>
+        <tr><td colspan="7" class="px-4 py-2">No matches added yet.</td></tr>
         {% endfor %}
     </tbody>
 </table>
