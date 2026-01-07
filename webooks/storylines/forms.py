@@ -29,13 +29,15 @@ class AddMatchToStorylineForm(forms.Form):
 
 class AddEventToStorylineForm(forms.Form):
     event = forms.ModelChoiceField(
-        queryset=Event.objects.all(),
+        queryset=Event.objects.none(),
         label="Select Event",
         required=True
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, available_events=None, **kwargs):
         super().__init__(*args, **kwargs)
+        if available_events is not None:
+            self.fields['event'].queryset = available_events
 
         for name, field in self.fields.items():
             if isinstance(field.widget, forms.CheckboxSelectMultiple):

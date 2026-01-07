@@ -72,15 +72,28 @@ def add_match_to_storyline(request, pk):
 
 def add_event_to_storyline(request, pk):
     storyline = get_object_or_404(Storyline, pk=pk)
-    
+    event_ct = ContentType.objects.get_for_model(Event)
+
+    # Exclude events already in this storyline
+    used_event_ids = StorylinePoint.objects.filter(
+        storyline=storyline,
+        content_type=event_ct
+    ).values_list('object_id', flat=True)
+
+    available_events = Event.objects.exclude(id__in=used_event_ids)
+
     if request.method == "POST":
-        form = AddEventToStorylineForm(request.POST)
+        form = AddEventToStorylineForm(request.POST, available_events=available_events)
         if form.is_valid():
             event = form.cleaned_data["event"]
-            storyline.events.add(event)
+            # Create a StorylinePoint for the selected event
+            StorylinePoint.objects.create(
+                storyline=storyline,
+                content_type=event_ct,
+                object_id=event.id
+            )
             return redirect("storyline-detail", pk=storyline.id)
     else:
-        form = AddEventToStorylineForm()
-        form.fields["event"].queryset = Event.objects.exclude(storylines=storyline)
+        form = AddEventToStorylineForm(available_events=available_events)
 
     return render(request, "storylines/add_event_to_storyline.html", {"form": form, "storyline": storyline})
