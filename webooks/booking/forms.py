@@ -112,7 +112,7 @@ class MatchParticipantForm(forms.ModelForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ["show", "title", "event_type", "description"]
+        fields = ["title", "event_type", "description"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

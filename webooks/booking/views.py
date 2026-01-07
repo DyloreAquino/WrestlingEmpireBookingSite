@@ -142,14 +142,35 @@ class EventCreateView(CreateView):
     model = Event
     form_class = EventForm
     template_name = "booking/event_form.html"
-    success_url = reverse_lazy("show-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["show"] = Show.objects.get(pk=self.kwargs["show_id"])
+        return context
+
+    def form_valid(self, form):
+        # Ensure the show is set (should already be set from initial, but double-check)
+        show = Show.objects.get(pk=self.kwargs["show_id"])
+        form.instance.show = show
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("show-detail", kwargs={"pk": self.object.show.id})
 
 # Event Update
 class EventUpdateView(UpdateView):
     model = Event
     form_class = EventForm
     template_name = "booking/event_form.html"
-    success_url = reverse_lazy("show-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pass the show explicitly to the template
+        context["show"] = self.object.show
+        return context
+
+    def get_success_url(self):
+        return reverse("show-detail", kwargs={"pk": self.object.show.pk})
 
 class EventParticipantCreateView(CreateView):
     model = EventParticipant
