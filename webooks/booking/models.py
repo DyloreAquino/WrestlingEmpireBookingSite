@@ -160,6 +160,12 @@ class Event(models.Model):
         return self.title
 
 class EventParticipant(models.Model):
+    class Role(models.TextChoices):
+        INITIATOR = "INITIATOR", "Initiator"
+        INTERFERENCE = "INTERFERENCE", "Interference"
+        VICTIM = "VICTIM", "Victim"
+        ATTACKER = "ATTACKER", "Attacker"
+
     event = models.ForeignKey(
         Event, on_delete=models.CASCADE, related_name="participants"
     )
@@ -171,7 +177,7 @@ class EventParticipant(models.Model):
         Group, null=True, blank=True, on_delete=models.CASCADE
     )
 
-    role = models.CharField(max_length=50, blank=True)
+    role = models.CharField(max_length=20, choices=Role.choices, blank=True)
 
     def __str__(self):
         target = self.character or self.group

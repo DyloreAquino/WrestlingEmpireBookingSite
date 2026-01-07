@@ -198,6 +198,21 @@ class EventParticipantCreateView(CreateView):
         event_id = self.kwargs.get("event_id")
         return {"event": event_id} if event_id else {}
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pass the event explicitly to the template
+        event_id = self.kwargs.get("event_id")
+        context['event'] = Event.objects.get(pk=event_id) if event_id else None
+        return context
+
+    def form_valid(self, form):
+        # Assign the event before saving if available from URL
+        event_id = self.kwargs.get("event_id")
+        if event_id:
+            event = Event.objects.get(pk=event_id)
+            form.instance.event = event
+        return super().form_valid(form)
+
     def get_success_url(self):
         return reverse_lazy("event-detail", kwargs={"pk": self.object.event.id})
 
