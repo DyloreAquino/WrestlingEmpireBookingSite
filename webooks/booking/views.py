@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
-from booking.models import Show, Match, MatchParticipant, Event, EventParticipant
+from booking.models import Show, Match, MatchParticipant, Event, EventParticipant, MatchResult
 from booking.forms import MatchSimulationForm, ShowForm, MatchForm, MatchParticipantForm, EventForm, EventParticipantForm
 from core.models import Character
 from titles.models import TitleReign
@@ -222,9 +222,15 @@ def simulate_match(request, pk):
             winners = form.cleaned_data["winners"]
             winners.update(won=True)
             
-            # Save match finish
-            match.finish = form.cleaned_data["finish"]
-            match.save()
+            # Save match finish as a MatchResult (create or update)
+            finish = form.cleaned_data["finish"]
+            MatchResult.objects.update_or_create(
+                match=match,
+                defaults={
+                    "finish_type": finish,
+                    "is_no_contest": finish == MatchResult.FinishType.NO_FINISH,
+                }
+            )
 
             # Handle championship title changes
             if match.championship:

@@ -68,6 +68,14 @@ class Match(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def finish(self):
+        """Return the human-readable finish label from the related MatchResult, or None if not recorded."""
+        try:
+            return self.result.get_finish_type_display()
+        except Exception:
+            return None
+
 
 class MatchParticipant(models.Model):
     class Role(models.TextChoices):

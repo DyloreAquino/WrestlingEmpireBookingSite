@@ -1,14 +1,8 @@
 from django import forms
-from booking.models import MatchParticipant
+from booking.models import MatchParticipant, MatchResult
 
-MATCH_FINISH_CHOICES = [
-    ("Pinfall", "Pinfall"),
-    ("Submission", "Submission"),
-    ("Countout", "Countout"),
-    ("DQ", "DQ"),
-    ("Unique", "Unique"),
-    ("No Finish", "No Finish"),
-]
+# Use the model's FinishType choices so values align with MatchResult.finish_type
+MATCH_FINISH_CHOICES = MatchResult.FinishType.choices
 
 class MatchSimulationForm(forms.Form):
     finish = forms.ChoiceField(
