@@ -41,7 +41,7 @@
     <p>
         <strong>Manager:</strong>
         {% if character.manager %}
-            <a href="{% url 'character-detail' character.manager.id %}" class="text-blue-600">{{ character.manager.ring_name }}</a>
+            <button onclick="window.location='{% url 'character-detail' character.manager.id %}'" class="bg-blue-600 text-white px-2 py-1 rounded cursor-pointer">{{ character.manager.ring_name }}</button>
         {% else %}
             None
         {% endif %}
@@ -50,7 +50,7 @@
         <strong>Friends:</strong>
         {% if character.friends.exists %}
             {% for f in character.friends.all %}
-                <a href="{% url 'character-detail' f.id %}" class="text-green-600">{{ f.ring_name }}</a>{% if not forloop.last %}, {% endif %}
+                <button onclick="window.location='{% url 'character-detail' f.id %}'" class="bg-green-600 text-white px-2 py-1 rounded cursor-pointer">{{ f.ring_name }}</button>{% if not forloop.last %} {% endif %}
             {% endfor %}
         {% else %}
             None
@@ -60,7 +60,7 @@
         <strong>Enemies:</strong>
         {% if character.enemies.exists %}
             {% for e in character.enemies.all %}
-                <a href="{% url 'character-detail' e.id %}" class="text-red-600">{{ e.ring_name }}</a>{% if not forloop.last %}, {% endif %}
+                <button onclick="window.location='{% url 'character-detail' e.id %}'" class="bg-red-600 text-white px-2 py-1 rounded cursor-pointer">{{ e.ring_name }}</button>{% if not forloop.last %} {% endif %}
             {% endfor %}
         {% else %}
             None
@@ -80,7 +80,7 @@
     <ul class="list-disc pl-5">
         {% for mp in matches %}
         <li>
-            <a href="{% url 'match-detail' mp.match.id %}" class="text-blue-600">{{ mp.match.title }}</a>
+            <button onclick="window.location='{% url 'match-detail' mp.match.id %}'" class="bg-blue-600 text-white px-2 py-1 rounded cursor-pointer">{{ mp.match.title }}</button>
             - {% if mp.won %}<span class="text-green-600 font-semibold">Winner</span>{% else %}<span class="text-red-600">Loser</span>{% endif %}
         </li>
         {% empty %}
@@ -95,7 +95,7 @@
     <ul class="list-disc pl-5">
         {% for ep in events %}
         <li>
-            <a href="{% url 'event-detail' ep.event.id %}" class="text-blue-600">{{ ep.event.title }}</a>
+            <button onclick="window.location='{% url 'event-detail' ep.event.id %}'" class="bg-blue-600 text-white px-2 py-1 rounded cursor-pointer">{{ ep.event.title }}</button>
             - {{ ep.event.get_event_type_display }}
         </li>
         {% empty %}

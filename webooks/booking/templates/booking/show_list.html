@@ -18,10 +18,11 @@
     </thead>
     <tbody>
         {% for show in shows %}
-        <tr class="border-t hover:bg-gray-50 dark:hover:bg-gray-800">
-            <td class="px-4 py-2">
-                <a href="{% url 'show-detail' show.id %}" class="text-blue-600">{{ show.title }}</a>
-            </td>
+        <tr 
+            class="border-t hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+            onclick="window.location='{% url 'show-detail' show.id %}'"
+        >
+            <td class="px-4 py-2 font-bold">{{ show.title }}</td>
             <td class="px-4 py-2">{{ show.get_show_type_display }}</td>
             <td class="px-4 py-2">{{ show.episode_number }}</td>
             <td class="px-4 py-2">{{ show.airing_date|date:"M d, Y" }}</td>

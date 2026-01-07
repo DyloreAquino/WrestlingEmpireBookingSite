@@ -70,11 +70,11 @@
 {% if is_paginated %}
 <div class="mt-4">
   {% if page_obj.has_previous %}
-    <a href="?page={{ page_obj.previous_page_number }}" class="px-2 py-1 border">Previous</a>
+    <button onclick="window.location='?page={{ page_obj.previous_page_number }}'" class="px-2 py-1 border bg-gray-200 dark:bg-gray-700 cursor-pointer">Previous</button>
   {% endif %}
   <span class="px-2 py-1">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
   {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}" class="px-2 py-1 border">Next</a>
+    <button onclick="window.location='?page={{ page_obj.next_page_number }}'" class="px-2 py-1 border bg-gray-200 dark:bg-gray-700 cursor-pointer">Next</button>
   {% endif %}
 </div>
 {% endif %}

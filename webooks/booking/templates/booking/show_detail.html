@@ -11,21 +11,21 @@
 <p>
     <strong>Filmed:</strong> {{ show.filmed }}
     <strong>Uploaded:</strong> {{ show.uploaded }}
-    {% if show.youtube_link %}<a href="{{ show.youtube_link }}" target="_blank" class="text-blue-600 ml-2">Watch</a>{% endif %}
+    {% if show.youtube_link %}<a href="{{ show.youtube_link }}" target="_blank" class="bg-blue-600 text-white px-3 py-1 rounded ml-2 inline-block">Watch</a>{% endif %}
 </p>
 
-<a href="{% url 'show-edit' show.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">Edit Show</a>
+<button onclick="window.location='{% url 'show-edit' show.id %}'" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded cursor-pointer">Edit Show</button>
 
 <div class="flex gap-4 mb-4">
-  <a href="{% url 'match-add' show.id %}"
-     class="px-4 py-2 bg-blue-600 text-white rounded">
+  <button onclick="window.location='{% url 'match-add' show.id %}'"
+     class="px-4 py-2 bg-blue-600 text-white rounded cursor-pointer">
     + Add Match
-  </a>
+  </button>
 
-  <a href="{% url 'event-add' show.id %}"
-     class="px-4 py-2 bg-purple-600 text-white rounded">
+  <button onclick="window.location='{% url 'event-add' show.id %}'"
+     class="px-4 py-2 bg-purple-600 text-white rounded cursor-pointer">
     + Add Event
-  </a>
+  </button>
 </div>
 
 <hr class="my-6">
@@ -44,10 +44,11 @@
     </thead>
     <tbody>
         {% for match in matches %}
-        <tr class="border-t hover:bg-gray-50 dark:hover:bg-gray-800">
-            <td class="px-4 py-2">
-                <a href="{% url 'match-detail' match.id %}" class="text-blue-600">{{ match.title }}</a>
-            </td>
+        <tr 
+            class="border-t hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+            onclick="window.location='{% url 'match-detail' match.id %}'"
+        >
+            <td class="px-4 py-2 font-bold">{{ match.title }}</td>
             <td class="px-4 py-2">{{ match.get_match_type_display }}</td>
             <td class="px-4 py-2">{{ match.get_stipulation_display|default:"-" }}</td>
             <td class="px-4 py-2">{{ match.championship|default:"-" }}</td>
@@ -58,14 +59,14 @@
                     Not Simulated
                 {% endif %}
             </td>
-            <td class="px-4 py-2">
+            <td class="px-4 py-2" onclick="event.stopPropagation()">
                 {% if not match.finish %}
-                    <a href="{% url 'match-simulate' match.id %}" class="bg-black text-white px-2 py-1 rounded">Simulate</a>
+                    <button onclick="window.location='{% url 'match-simulate' match.id %}'" class="bg-black text-white px-2 py-1 rounded cursor-pointer">Simulate</button>
                 {% else %}
                     ✅ Simulated
                 {% endif %}
-                <a href="{% url 'match-edit' match.id %}" class="bg-gray-700 text-white px-2 py-1 rounded ml-1">Edit</a>
-                <a href="{% url 'match-delete' match.id %}" class="bg-red-600 text-white px-2 py-1 rounded ml-1">Delete</a>
+                <button onclick="window.location='{% url 'match-edit' match.id %}'" class="bg-gray-700 text-white px-2 py-1 rounded ml-1 cursor-pointer">Edit</button>
+                <button onclick="window.location='{% url 'match-delete' match.id %}'" class="bg-red-600 text-white px-2 py-1 rounded ml-1 cursor-pointer">Delete</button>
             </td>
         </tr>
         {% empty %}
@@ -77,15 +78,30 @@
 <hr class="my-6">
 
 <h2 class="text-xl font-semibold mb-2">Events</h2>
-<ul class="list-disc pl-5">
-    {% for event in events %}
-        <li class="mb-2">
-            <a href="{% url 'event-detail' event.id %}" class="text-blue-600">{{ event.title }}</a>
-            <a href="{% url 'event-delete' event.id %}" class="bg-red-600 text-white px-2 py-1 rounded ml-2 text-sm">Delete</a>
-        </li>
-    {% empty %}
-        <li>No events added yet.</li>
-    {% endfor %}
-</ul>
+<table class="min-w-full border border-gray-300">
+    <thead class="bg-gray-100 dark:bg-gray-700">
+        <tr>
+            <th class="px-4 py-2">Title</th>
+            <th class="px-4 py-2">Type</th>
+            <th class="px-4 py-2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+        <tr 
+            class="border-t hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+            onclick="window.location='{% url 'event-detail' event.id %}'"
+        >
+            <td class="px-4 py-2 font-bold">{{ event.title }}</td>
+            <td class="px-4 py-2">{{ event.get_event_type_display }}</td>
+            <td class="px-4 py-2" onclick="event.stopPropagation()">
+                <button onclick="window.location='{% url 'event-delete' event.id %}'" class="bg-red-600 text-white px-2 py-1 rounded cursor-pointer">Delete</button>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3" class="px-4 py-2">No events added yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}

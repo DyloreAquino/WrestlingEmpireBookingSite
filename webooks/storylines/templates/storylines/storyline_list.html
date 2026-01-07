@@ -5,15 +5,25 @@
 {% block content %}
 <h1 class="text-3xl font-bold mb-6">Storylines</h1>
 
-<a href="{% url 'storyline-add' %}" class="bg-black text-white px-4 py-2 rounded mb-4 inline-block">Add Storyline</a>
+<button onclick="window.location='{% url 'storyline-add' %}'" class="bg-black text-white px-4 py-2 rounded mb-4 inline-block cursor-pointer">Add Storyline</button>
 
-<ul class="list-disc pl-5">
-    {% for storyline in storylines %}
-        <li>
-            <a href="{% url 'storyline-detail' storyline.id %}" class="text-blue-600">{{ storyline.title }}</a>
-        </li>
-    {% empty %}
-        <li>No storylines yet.</li>
-    {% endfor %}
-</ul>
+<table class="min-w-full border border-gray-300">
+    <thead class="bg-gray-100 dark:bg-gray-700">
+        <tr>
+            <th class="px-4 py-2">Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for storyline in storylines %}
+        <tr 
+            class="border-t hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+            onclick="window.location='{% url 'storyline-detail' storyline.id %}'"
+        >
+            <td class="px-4 py-2 font-bold">{{ storyline.title }}</td>
+        </tr>
+        {% empty %}
+        <tr><td class="px-4 py-2">No storylines yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

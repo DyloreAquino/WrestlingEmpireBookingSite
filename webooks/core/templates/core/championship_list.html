@@ -14,15 +14,16 @@
     </thead>
     <tbody>
         {% for champ in championships %}
-        <tr class="border-t hover:bg-gray-50 dark:hover:bg-gray-800">
-            <td class="px-4 py-2">
-                <a href="{% url 'championship-detail' champ.id %}" class="text-blue-600">{{ champ.name }}</a>
-            </td>
-            <td class="px-4 py-2">
+        <tr 
+            class="border-t hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+            onclick="window.location='{% url 'championship-detail' champ.id %}'"
+        >
+            <td class="px-4 py-2 font-bold">{{ champ.name }}</td>
+            <td class="px-4 py-2" onclick="event.stopPropagation()">
                 {% with current=champ.reigns.filter(end_date__isnull=True) %}
                     {% if current.exists %}
                         {% for reign in current %}
-                            <a href="{% url 'character-detail' reign.character.id %}" class="text-green-600">{{ reign.character.ring_name }}</a>{% if not forloop.last %}, {% endif %}
+                            <button onclick="window.location='{% url 'character-detail' reign.character.id %}'" class="bg-green-600 text-white px-2 py-1 rounded cursor-pointer">{{ reign.character.ring_name }}</button>{% if not forloop.last %} {% endif %}
                         {% endfor %}
                     {% else %}
                         None

@@ -18,12 +18,12 @@
 <ul class="list-disc pl-5">
     {% for member in members %}
         <li>
-            <a href="{% url 'character-detail' member.id %}" class="text-blue-600">{{ member.ring_name }}</a>
+            <button onclick="window.location='{% url 'character-detail' member.id %}'" class="bg-blue-600 text-white px-2 py-1 rounded cursor-pointer">{{ member.ring_name }}</button>
         </li>
     {% empty %}
         <li>No members yet.</li>
     {% endfor %}
 </ul>
 
-<a href="{% url 'group-edit' group.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">Edit Group</a>
+<button onclick="window.location='{% url 'group-edit' group.id %}'" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded cursor-pointer">Edit Group</button>
 {% endblock %}

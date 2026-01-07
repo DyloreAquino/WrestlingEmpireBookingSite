@@ -25,9 +25,9 @@
 </form>
 
 {% if show %}
-<a href="{% url 'show-detail' show.id %}" class="text-blue-600 mt-4 inline-block">
+<button onclick="window.location='{% url 'show-detail' show.id %}'" class="bg-gray-600 text-white px-4 py-2 rounded mt-4 inline-block cursor-pointer">
     ← Back to Show
-</a>
+</button>
 {% endif %}
 
 {% endblock %}

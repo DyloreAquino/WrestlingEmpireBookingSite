@@ -25,8 +25,8 @@
 </form>
 
 {% if view.object %}
-<a href="{% url 'event-detail' view.object.event.id %}" class="text-blue-600 mt-4 inline-block">Back to Event</a>
+<button onclick="window.location='{% url 'event-detail' view.object.event.id %}'" class="bg-gray-600 text-white px-4 py-2 rounded mt-4 inline-block cursor-pointer">Back to Event</button>
 {% else %}
-<a href="{% url 'event-detail' form.initial.event.id %}" class="text-blue-600 mt-4 inline-block">Back to Event</a>
+<button onclick="window.location='{% url 'event-detail' form.initial.event.id %}'" class="bg-gray-600 text-white px-4 py-2 rounded mt-4 inline-block cursor-pointer">Back to Event</button>
 {% endif %}
 {% endblock %}

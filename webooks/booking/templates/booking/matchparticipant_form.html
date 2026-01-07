@@ -25,7 +25,7 @@
 </form>
 
 <!-- Always use the `match` variable passed from the view -->
-<a href="{% url 'match-detail' match.id %}" class="text-blue-600 mt-4 inline-block">
+<button onclick="window.location='{% url 'match-detail' match.id %}'" class="bg-gray-600 text-white px-4 py-2 rounded mt-4 inline-block cursor-pointer">
     ← Back to Match
-</a>
+</button>
 {% endblock %}

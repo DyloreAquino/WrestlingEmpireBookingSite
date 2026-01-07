@@ -5,20 +5,20 @@
 {% block content %}
 <h1 class="text-3xl font-bold mb-4">{{ match.title }}</h1>
 
-<p><strong>Show:</strong> <a href="{% url 'show-detail' match.show.id %}" class="text-blue-600">{{ match.show.title }}</a></p>
+<p><strong>Show:</strong> <button onclick="window.location='{% url 'show-detail' match.show.id %}'" class="bg-blue-600 text-white px-3 py-1 rounded cursor-pointer">{{ match.show.title }}</button></p>
 <p><strong>Type:</strong> {{ match.get_match_type_display }}</p>
 <p><strong>Stipulation:</strong> {{ match.get_stipulation_display|default:"None" }}</p>
 <p><strong>Championship:</strong> {{ match.championship|default:"None" }}</p>
 <p><strong>Notes:</strong> {{ match.notes|default:"None" }}</p>
 
 <h2 class="text-xl font-semibold mt-6 mb-2">Participants</h2>
-<a href="{% url 'matchparticipant-add' match.id %}" class="bg-black text-white px-4 py-2 rounded mt-4 inline-block">
+<button onclick="window.location='{% url 'matchparticipant-add' match.id %}'" class="bg-black text-white px-4 py-2 rounded mt-4 inline-block cursor-pointer">
     Add Participant
-</a>
+</button>
 <ul class="list-disc pl-5">
     {% for mp in participants %}
         <li>
-            <a href="{% url 'character-detail' mp.character.id %}" class="text-blue-600">{{ mp.character.ring_name }}</a>
+            <button onclick="window.location='{% url 'character-detail' mp.character.id %}'" class="bg-blue-600 text-white px-2 py-1 rounded cursor-pointer">{{ mp.character.ring_name }}</button>
             - Side: {{ mp.get_side_display }}
             {% if mp.won %}<span class="text-green-600 font-semibold ml-2">Winner</span>{% endif %}
         </li>
@@ -28,7 +28,7 @@
 </ul>
 
 <div class="mt-4 flex gap-2">
-    <a href="{% url 'match-edit' match.id %}" class="bg-gray-700 text-white px-4 py-2 rounded">Edit Match</a>
-    <a href="{% url 'match-delete' match.id %}" class="bg-red-600 text-white px-4 py-2 rounded">Delete Match</a>
+    <button onclick="window.location='{% url 'match-edit' match.id %}'" class="bg-gray-700 text-white px-4 py-2 rounded cursor-pointer">Edit Match</button>
+    <button onclick="window.location='{% url 'match-delete' match.id %}'" class="bg-red-600 text-white px-4 py-2 rounded cursor-pointer">Delete Match</button>
 </div>
 {% endblock %}

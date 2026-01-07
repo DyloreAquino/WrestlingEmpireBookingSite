@@ -9,7 +9,7 @@
 
 <h2 class="text-xl font-semibold mt-6 mb-2">Current Champion</h2>
 {% if current_reign %}
-    <a href="{% url 'character-detail' current_reign.character.id %}" class="text-blue-600">{{ current_reign.character.ring_name }}</a>
+    <button onclick="window.location='{% url 'character-detail' current_reign.character.id %}'" class="bg-blue-600 text-white px-2 py-1 rounded cursor-pointer">{{ current_reign.character.ring_name }}</button>
     - Since {{ current_reign.start_date|date:"M d, Y" }}
 {% else %}
     <p>No current champion.</p>
@@ -19,7 +19,7 @@
 <ul class="list-disc pl-5">
     {% for reign in past_reigns %}
         <li>
-            <a href="{% url 'character-detail' reign.character.id %}" class="text-blue-600">{{ reign.character.ring_name }}</a>
+            <button onclick="window.location='{% url 'character-detail' reign.character.id %}'" class="bg-blue-600 text-white px-2 py-1 rounded cursor-pointer">{{ reign.character.ring_name }}</button>
             - {{ reign.start_date|date:"M d, Y" }} to {{ reign.end_date|date:"M d, Y" }}
         </li>
     {% empty %}
@@ -27,5 +27,5 @@
     {% endfor %}
 </ul>
 
-<a href="{% url 'championship-edit' championship.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">Edit Championship</a>
+<button onclick="window.location='{% url 'championship-edit' championship.id %}'" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded cursor-pointer">Edit Championship</button>
 {% endblock %}
