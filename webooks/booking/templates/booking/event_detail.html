@@ -32,4 +32,11 @@
         Delete Event
     </button>
 </div>
+
+<p>
+<button onclick="window.location='{% url 'show-detail' event.show.id %}'" 
+    class="bg-blue-600 text-white px-3 py-1 rounded cursor-pointer">
+        Back to show
+    </button>
+</p>
 {% endblock %}

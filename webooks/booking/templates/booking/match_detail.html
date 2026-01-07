@@ -31,4 +31,10 @@
     <button onclick="window.location='{% url 'match-edit' match.id %}'" class="bg-gray-700 text-white px-4 py-2 rounded cursor-pointer">Edit Match</button>
     <button onclick="window.location='{% url 'match-delete' match.id %}'" class="bg-red-600 text-white px-4 py-2 rounded cursor-pointer">Delete Match</button>
 </div>
+
+<button onclick="window.location='{% url 'show-detail' match.show.id %}'" 
+    class="bg-blue-600 text-white px-3 py-1 rounded cursor-pointer">
+        Back to show
+    </button>
+</p>
 {% endblock %}
