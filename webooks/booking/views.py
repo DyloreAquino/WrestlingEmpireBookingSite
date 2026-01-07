@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 from booking.models import Show, Match, MatchParticipant, Event, EventParticipant
 from booking.forms import MatchSimulationForm, ShowForm, MatchForm, MatchParticipantForm, EventForm, EventParticipantForm
@@ -87,6 +87,14 @@ class MatchUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse("show-detail", kwargs={"pk": self.object.show.pk})
+
+# Match Delete
+class MatchDeleteView(DeleteView):
+    model = Match
+    template_name = "booking/match_confirm_delete.html"
+
+    def get_success_url(self):
+        return reverse("show-detail", kwargs={"pk": self.object.show.pk})
     
 
 class MatchParticipantCreateView(CreateView):
@@ -168,6 +176,14 @@ class EventUpdateView(UpdateView):
         # Pass the show explicitly to the template
         context["show"] = self.object.show
         return context
+
+    def get_success_url(self):
+        return reverse("show-detail", kwargs={"pk": self.object.show.pk})
+
+# Event Delete
+class EventDeleteView(DeleteView):
+    model = Event
+    template_name = "booking/event_confirm_delete.html"
 
     def get_success_url(self):
         return reverse("show-detail", kwargs={"pk": self.object.show.pk})

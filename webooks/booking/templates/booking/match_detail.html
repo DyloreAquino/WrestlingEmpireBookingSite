@@ -27,5 +27,8 @@
     {% endfor %}
 </ul>
 
-<a href="{% url 'match-edit' match.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">Edit Match</a>
+<div class="mt-4 flex gap-2">
+    <a href="{% url 'match-edit' match.id %}" class="bg-gray-700 text-white px-4 py-2 rounded">Edit Match</a>
+    <a href="{% url 'match-delete' match.id %}" class="bg-red-600 text-white px-4 py-2 rounded">Delete Match</a>
+</div>
 {% endblock %}

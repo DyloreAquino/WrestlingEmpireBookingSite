@@ -65,6 +65,7 @@
                     ✅ Simulated
                 {% endif %}
                 <a href="{% url 'match-edit' match.id %}" class="bg-gray-700 text-white px-2 py-1 rounded ml-1">Edit</a>
+                <a href="{% url 'match-delete' match.id %}" class="bg-red-600 text-white px-2 py-1 rounded ml-1">Delete</a>
             </td>
         </tr>
         {% empty %}
@@ -78,8 +79,9 @@
 <h2 class="text-xl font-semibold mb-2">Events</h2>
 <ul class="list-disc pl-5">
     {% for event in events %}
-        <li>
+        <li class="mb-2">
             <a href="{% url 'event-detail' event.id %}" class="text-blue-600">{{ event.title }}</a>
+            <a href="{% url 'event-delete' event.id %}" class="bg-red-600 text-white px-2 py-1 rounded ml-2 text-sm">Delete</a>
         </li>
     {% empty %}
         <li>No events added yet.</li>

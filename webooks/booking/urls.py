@@ -1,8 +1,8 @@
 from django.urls import path
 from booking.views import ShowListView, ShowDetailView, ShowCreateView, ShowUpdateView, simulate_match
-from booking.views import MatchDetailView, MatchCreateView, MatchUpdateView
+from booking.views import MatchDetailView, MatchCreateView, MatchUpdateView, MatchDeleteView
 from booking.views import MatchParticipantCreateView, MatchParticipantUpdateView
-from booking.views import EventDetailView, EventCreateView, EventUpdateView
+from booking.views import EventDetailView, EventCreateView, EventUpdateView, EventDeleteView
 from booking.views import EventParticipantCreateView, EventParticipantUpdateView
 
 urlpatterns = [
@@ -20,6 +20,7 @@ urlpatterns += [
     ),
     path("matches/<int:pk>/", MatchDetailView.as_view(), name="match-detail"),
     path("matches/<int:pk>/edit/", MatchUpdateView.as_view(), name="match-edit"),
+    path("matches/<int:pk>/delete/", MatchDeleteView.as_view(), name="match-delete"),
 ]
 
 urlpatterns += [
@@ -43,6 +44,7 @@ urlpatterns += [
     ),
     path("events/<int:pk>/", EventDetailView.as_view(), name="event-detail"),
     path("events/<int:pk>/edit/", EventUpdateView.as_view(), name="event-edit"),
+    path("events/<int:pk>/delete/", EventDeleteView.as_view(), name="event-delete"),
 ]
 
 urlpatterns += [

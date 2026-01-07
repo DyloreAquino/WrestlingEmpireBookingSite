@@ -7,7 +7,7 @@
 
 <p><strong>Show:</strong> <a href="{% url 'show-detail' event.show.id %}" class="text-blue-600">{{ event.show.title }}</a></p>
 <p><strong>Type:</strong> {{ event.get_event_type_display }}</p>
-<p><strong>Description:</strong> {{ event.short_description|default:"None" }}</p>
+<p><strong>Description:</strong> {{ event.description|default:"None" }}</p>
 
 <h2 class="text-xl font-semibold mt-6 mb-2">Participants</h2>
 <a href="{% url 'eventparticipant-add' event.id %}" class="bg-black text-white px-4 py-2 rounded mt-4 inline-block">
@@ -24,11 +24,12 @@
     {% endfor %}
 </ul>
 
-<a href="{% url 'eventparticipant-add' event.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded">
-    Add Participant
-</a>
-
-<a href="{% url 'event-edit' event.id %}" class="bg-black text-white px-4 py-2 mt-4 inline-block rounded ml-2">
-    Edit Event
-</a>
+<div class="mt-4 flex gap-2">
+    <a href="{% url 'event-edit' event.id %}" class="bg-gray-700 text-white px-4 py-2 rounded">
+        Edit Event
+    </a>
+    <a href="{% url 'event-delete' event.id %}" class="bg-red-600 text-white px-4 py-2 rounded">
+        Delete Event
+    </a>
+</div>
 {% endblock %}
