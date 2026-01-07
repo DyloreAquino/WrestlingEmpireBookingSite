@@ -141,6 +141,7 @@ class Event(models.Model):
         CONFRONTATION = "CONFRONTATION", "Confrontation"
         TRAINING = "TRAINING", "Training"
         SEGMENT = "SEGMENT", "Segment"
+        INJURY = "INJURY", "Injury"
         TURN = "TURN", "Turn"
         
     show = models.ForeignKey(
