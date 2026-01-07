@@ -15,7 +15,7 @@
 
 <h2 class="text-xl font-semibold mt-6 mb-2">Championships / Title Reigns</h2>
 <ul class="list-disc pl-5">
-    {% for reign in character.titlereign_set.all %}
+    {% for reign in character.title_reigns.all %}
         <li>
             <a href="{% url 'championship-detail' reign.championship.id %}" class="text-blue-600">
                 {{ reign.championship.name }}

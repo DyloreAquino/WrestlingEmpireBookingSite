@@ -27,7 +27,7 @@
                 </td>
                 <td class="px-4 py-2">{{ match.finish|default:"-" }}</td>
                 <td class="px-4 py-2">
-                    {% for participant in match.matchparticipant_set.all %}
+                    {% for participant in match.participants.all %}
                         {% if participant.won %}
                             {{ participant.character.ring_name }}{% if not forloop.last %}, {% endif %}
                         {% endif %}

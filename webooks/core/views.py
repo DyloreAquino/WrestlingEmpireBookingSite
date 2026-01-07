@@ -52,8 +52,14 @@ class CharacterDetailView(DetailView):
         total_matches = MatchParticipant.objects.filter(character=character).count()
         context["win_loss_ratio"] = f"{wins} / {total_matches}" if total_matches else "0 / 0"
 
-        # Storyline points (optional)
-        context["storyline_points"] = character.storylinepoint_set.all() if hasattr(character, 'storylinepoint_set') else []
+        # Storyline points (optional) - StorylinePoint uses GenericForeignKey, so query directly
+        from storylines.models import StorylinePoint
+        from django.contrib.contenttypes.models import ContentType
+        character_ct = ContentType.objects.get_for_model(Character)
+        context["storyline_points"] = StorylinePoint.objects.filter(
+            content_type=character_ct,
+            object_id=character.id
+        )
 
         return context
 
@@ -112,7 +118,7 @@ class ChampionshipDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Current champion(s)
-        context["current_reigns"] = self.object.titlereign_set.filter(end_date__isnull=True)
+        context["current_reigns"] = self.object.reigns.filter(end_date__isnull=True)
         # Full title history
-        context["history"] = self.object.titlereign_set.order_by('-start_date')
+        context["history"] = self.object.reigns.order_by('-start_date')
         return context

@@ -5,7 +5,7 @@ from titles.models import Championship
 def homepage(request):
     # Last aired show
     last_show = Show.objects.filter(is_filmed=True).order_by('-airing_date').first()
-    last_show_matches = last_show.match_set.all() if last_show else []
+    last_show_matches = last_show.matches.all() if last_show else []
 
     # Current champions
     championships = Championship.objects.all()

@@ -19,7 +19,7 @@
                 <a href="{% url 'championship-detail' champ.id %}" class="text-blue-600">{{ champ.name }}</a>
             </td>
             <td class="px-4 py-2">
-                {% with current=champ.titlereign_set.filter(end_date__isnull=True) %}
+                {% with current=champ.reigns.filter(end_date__isnull=True) %}
                     {% if current.exists %}
                         {% for reign in current %}
                             <a href="{% url 'character-detail' reign.character.id %}" class="text-green-600">{{ reign.character.ring_name }}</a>{% if not forloop.last %}, {% endif %}
