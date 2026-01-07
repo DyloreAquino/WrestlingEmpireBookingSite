@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy, reverse
 from booking.models import Show, Match, MatchParticipant, Event, EventParticipant
-from booking.forms import MatchSimulationForm, ShowForm
+from booking.forms import MatchSimulationForm, ShowForm, MatchForm, MatchParticipantForm, EventForm, EventParticipantForm
 from core.models import Character
 from titles.models import TitleReign
 
@@ -56,13 +56,7 @@ class MatchDetailView(DetailView):
 
 class MatchCreateView(CreateView):
     model = Match
-    fields = [
-        "title",
-        "match_type",
-        "stipulations",
-        "championship",
-        "notes",
-    ]
+    form_class = MatchForm
     template_name = "booking/match_form.html"
 
     def get_context_data(self, **kwargs):
@@ -82,13 +76,7 @@ class MatchCreateView(CreateView):
 # Match Update
 class MatchUpdateView(UpdateView):
     model = Match
-    fields = [
-        "title",
-        "match_type",
-        "stipulations",
-        "championship",
-        "notes",
-    ]
+    form_class = MatchForm
     template_name = "booking/match_form.html"
 
     def get_context_data(self, **kwargs):
@@ -103,8 +91,8 @@ class MatchUpdateView(UpdateView):
 
 class MatchParticipantCreateView(CreateView):
     model = MatchParticipant
+    form_class = MatchParticipantForm
     template_name = "booking/matchparticipant_form.html"
-    fields = ["match", "character", "side", "won"]
     
     def get_initial(self):
         # Pre-fill the match if coming from match detail page
@@ -130,8 +118,8 @@ class MatchParticipantCreateView(CreateView):
 
 class MatchParticipantUpdateView(UpdateView):
     model = MatchParticipant
+    form_class = MatchParticipantForm
     template_name = "booking/matchparticipant_form.html"
-    fields = ["match", "character", "side", "won"]
 
     def get_success_url(self):
         return reverse_lazy("match-detail", kwargs={"pk": self.object.match.id})
@@ -152,21 +140,21 @@ class EventDetailView(DetailView):
 # Event Create
 class EventCreateView(CreateView):
     model = Event
+    form_class = EventForm
     template_name = "booking/event_form.html"
-    fields = ["show", "title", "event_type", "short_description"]
     success_url = reverse_lazy("show-list")
 
 # Event Update
 class EventUpdateView(UpdateView):
     model = Event
+    form_class = EventForm
     template_name = "booking/event_form.html"
-    fields = ["show", "title", "event_type", "short_description"]
     success_url = reverse_lazy("show-list")
 
 class EventParticipantCreateView(CreateView):
     model = EventParticipant
+    form_class = EventParticipantForm
     template_name = "booking/eventparticipant_form.html"
-    fields = ["event", "character", "role"]
 
     def get_initial(self):
         # Pre-fill the event if coming from event detail page
@@ -179,8 +167,8 @@ class EventParticipantCreateView(CreateView):
 
 class EventParticipantUpdateView(UpdateView):
     model = EventParticipant
+    form_class = EventParticipantForm
     template_name = "booking/eventparticipant_form.html"
-    fields = ["event", "character", "role"]
 
     def get_success_url(self):
         return reverse_lazy("event-detail", kwargs={"pk": self.object.event.id})

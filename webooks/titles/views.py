@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from titles.models import Championship, TitleReign
+from core.forms import ChampionshipForm
 
 # Championship Views
 
@@ -26,13 +27,13 @@ class ChampionshipDetailView(DetailView):
 
 class ChampionshipCreateView(CreateView):
     model = Championship
-    fields = ["name", "eligibility", "is_active"]
+    form_class = ChampionshipForm
     template_name = "titles/championship_form.html"
     success_url = reverse_lazy("championship-list")
 
 class ChampionshipUpdateView(UpdateView):
     model = Championship
-    fields = ["name", "eligibility", "is_active"]
+    form_class = ChampionshipForm
     template_name = "titles/championship_form.html"
     success_url = reverse_lazy("championship-list")
 

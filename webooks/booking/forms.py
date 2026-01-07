@@ -31,19 +31,14 @@ class MatchSimulationForm(forms.Form):
 
         # Tailwind styling
         for name, field in self.fields.items():
-            # Checkbox list (winners)
             if isinstance(field.widget, forms.CheckboxSelectMultiple):
                 field.widget.attrs.update({
                     "class": "space-y-2"
                 })
-
-            # Single checkbox (just in case later)
             elif isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs.update({
                     "class": "h-5 w-5 text-blue-600"
                 })
-
-            # Everything else (select, text, etc.)
             else:
                 field.widget.attrs.update({
                     "class": (
@@ -54,7 +49,117 @@ class MatchSimulationForm(forms.Form):
                 })
 
 from django import forms
-from booking.models import Show
+from booking.models import Show, Match, MatchParticipant, Event, EventParticipant
+
+class MatchForm(forms.ModelForm):
+    class Meta:
+        model = Match
+        fields = [
+            "title",
+            "match_type",
+            "stipulations",
+            "championship",
+            "notes",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            if isinstance(field.widget, forms.CheckboxSelectMultiple):
+                field.widget.attrs.update({
+                    "class": "space-y-2"
+                })
+            elif isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs.update({
+                    "class": "h-5 w-5 text-blue-600"
+                })
+            else:
+                field.widget.attrs.update({
+                    "class": (
+                        "w-half rounded-md px-3 py-2 text-white"
+                        "bg-gray-400 dark:bg-gray-700 "
+                        "focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    )
+                })
+
+class MatchParticipantForm(forms.ModelForm):
+    class Meta:
+        model = MatchParticipant
+        fields = ["match", "character", "side", "won"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            if isinstance(field.widget, forms.CheckboxSelectMultiple):
+                field.widget.attrs.update({
+                    "class": "space-y-2"
+                })
+            elif isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs.update({
+                    "class": "h-5 w-5 text-blue-600"
+                })
+            else:
+                field.widget.attrs.update({
+                    "class": (
+                        "w-half rounded-md px-3 py-2 text-white"
+                        "bg-gray-400 dark:bg-gray-700 "
+                        "focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    )
+                })
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ["show", "title", "event_type", "description"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            if isinstance(field.widget, forms.CheckboxSelectMultiple):
+                field.widget.attrs.update({
+                    "class": "space-y-2"
+                })
+            elif isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs.update({
+                    "class": "h-5 w-5 text-blue-600"
+                })
+            else:
+                field.widget.attrs.update({
+                    "class": (
+                        "w-half rounded-md px-3 py-2 text-white"
+                        "bg-gray-400 dark:bg-gray-700 "
+                        "focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    )
+                })
+
+class EventParticipantForm(forms.ModelForm):
+    class Meta:
+        model = EventParticipant
+        fields = ["event", "character", "role"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            if isinstance(field.widget, forms.CheckboxSelectMultiple):
+                field.widget.attrs.update({
+                    "class": "space-y-2"
+                })
+            elif isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs.update({
+                    "class": "h-5 w-5 text-blue-600"
+                })
+            else:
+                field.widget.attrs.update({
+                    "class": (
+                        "w-half rounded-md px-3 py-2 text-white"
+                        "bg-gray-400 dark:bg-gray-700 "
+                        "focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    )
+                })
 
 class ShowForm(forms.ModelForm):
     class Meta:
@@ -73,7 +178,11 @@ class ShowForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         for name, field in self.fields.items():
-            if isinstance(field.widget, forms.CheckboxInput):
+            if isinstance(field.widget, forms.CheckboxSelectMultiple):
+                field.widget.attrs.update({
+                    "class": "space-y-2"
+                })
+            elif isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs.update({
                     "class": "h-5 w-5 text-blue-600"
                 })

@@ -14,13 +14,11 @@
     {% csrf_token %}
 
     {% for field in form %}
-      <div>
-        <label class="block font-semibold mb-1">
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">
           {{ field.label }}
         </label>
-
         {{ field }}
-
         {% if field.errors %}
           <p class="text-red-500 text-sm mt-1">
             {{ field.errors|striptags }}

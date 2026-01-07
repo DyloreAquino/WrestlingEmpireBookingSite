@@ -9,7 +9,15 @@
 
 <form method="post" class="space-y-4">
     {% csrf_token %}
-    {{ form.as_p }}
+    
+    {% for field in form %}
+        <div class="mb-4">
+            <label class="block font-semibold mb-2">
+            {{ field.label }}
+            </label>
+            {{ field }}
+        </div>
+    {% endfor %}
 
     <button type="submit" class="bg-black text-white px-4 py-2 rounded">
         {% if view.object %}Update{% else %}Add{% endif %}

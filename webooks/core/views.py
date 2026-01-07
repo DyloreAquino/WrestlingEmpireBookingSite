@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from core.models import Character, Group, Championship
-from core.forms import CharacterForm
+from core.forms import CharacterForm, GroupForm, ChampionshipForm
 from booking.models import MatchParticipant, EventParticipant
 from django.urls import reverse_lazy
 
@@ -89,14 +89,14 @@ class GroupDetailView(DetailView):
 
 class GroupCreateView(CreateView):
     model = Group
+    form_class = GroupForm
     template_name = "core/group_form.html"
-    fields = ["name", "group_type", "active", "members"]
     success_url = reverse_lazy("group-list")
 
 class GroupUpdateView(UpdateView):
     model = Group
+    form_class = GroupForm
     template_name = "core/group_form.html"
-    fields = ["name", "group_type", "active", "members"]
     success_url = reverse_lazy("group-list")
 
 class ChampionshipListView(ListView):
